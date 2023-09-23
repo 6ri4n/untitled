@@ -2,7 +2,7 @@ const asyncHandler = require("../utils/asyncHandler");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
-const signUp = asyncHandler(async (req, res) => {
+const signupUser = asyncHandler(async (req, res) => {
   const { email, username, password } = req.body;
 
   if (!email || !password || !username) {
@@ -39,4 +39,4 @@ const signUp = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = signUp;
+module.exports = signupUser;

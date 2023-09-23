@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use("/signup", require("./routes/signup"));
 
+app.use("/login", require("./routes/login"));
+
 app.all("*", (req, res) => {
   res.status(404);
   throw new Error("Route not found");
