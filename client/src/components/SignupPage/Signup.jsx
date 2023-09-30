@@ -1,6 +1,7 @@
 import "./signup.css";
 import FormInput from "../FormInput/FormInput";
 import { useState, useEffect } from "react";
+import APIClient from "../../utils/api-client";
 
 const Signup = () => {
   const [signup, setSignup] = useState({
@@ -66,31 +67,18 @@ const Signup = () => {
   useEffect(() => {
     const validUsername = async (username) => {
       try {
-        const url = `http://localhost:3000/signup/username`;
+        const api = new APIClient();
+        await api.post("/signup/username", { username });
 
-        const requestOptions = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username }),
-        };
-
-        const response = await fetch(url, requestOptions);
-
-        if (response.ok) {
-          setValidate((prev) => ({
-            ...prev,
-            username: true,
-          }));
-        } else {
-          setValidate((prev) => ({
-            ...prev,
-            username: false,
-          }));
-        }
+        setValidate((prev) => ({
+          ...prev,
+          username: true,
+        }));
       } catch (error) {
-        console.error(error);
+        setValidate((prev) => ({
+          ...prev,
+          username: false,
+        }));
       }
     };
 
