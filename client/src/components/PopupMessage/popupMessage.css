@@ -1,0 +1,28 @@
+.popupContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 300px;
+}
+
+.x {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+.box {
+  text-align: center;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid green;
+  color: green;
+  font-size: 16px;
+}
+
+.text {
+  padding-left: 10px;
+}

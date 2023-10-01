@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import APIClient from "../../utils/api-client";
 import FormInput from "../FormInput/FormInput";
+import PopupMessage from "../PopUpMessage/PopUpMessage";
 import "./signup.css";
 
 const Signup = () => {
@@ -64,7 +65,7 @@ const Signup = () => {
     },
   ];
 
-  const [signupStatus, setSignupStatus] = useState(undefined);
+  const [signupStatus, setSignupStatus] = useState(false);
 
   const api = new APIClient();
 
@@ -145,7 +146,13 @@ const Signup = () => {
   return (
     <div className="container">
       <div className="formContainer">
-        {signupStatus && <div className="signupStatus">Account Created</div>}
+        {signupStatus && (
+          <PopupMessage
+            message={"Account Created"}
+            path="/login"
+          ></PopupMessage>
+        )}
+
         <form onSubmit={handleSubmit}>
           <h1>Sign Up</h1>
 
