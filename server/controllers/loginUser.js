@@ -4,21 +4,20 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password) {
+  if (!username || !password) {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ username });
 
   if (user && (await bcrypt.compare(password, user.password))) {
     const accessToken = jwt.sign(
       {
         user: {
           username: user.username,
-          email: user.email,
           id: user._id,
         },
       },
@@ -28,7 +27,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({ accessToken });
   } else {
     res.status(401);
-    throw new Error("Incorrect email or password.");
+    throw new Error("Incorrect username or password.");
   }
 });
 

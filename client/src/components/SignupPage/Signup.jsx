@@ -1,7 +1,7 @@
-import "./signup.css";
-import FormInput from "../FormInput/FormInput";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import APIClient from "../../utils/api-client";
+import FormInput from "../FormInput/FormInput";
+import "./signup.css";
 
 const Signup = () => {
   const [signup, setSignup] = useState({
@@ -64,10 +64,13 @@ const Signup = () => {
     },
   ];
 
+  const [signupStatus, setSignupStatus] = useState(undefined);
+
+  const api = new APIClient();
+
   useEffect(() => {
     const validUsername = async (username) => {
       try {
-        const api = new APIClient();
         await api.post("/signup/username", { username });
 
         setValidate((prev) => ({
@@ -118,30 +121,41 @@ const Signup = () => {
     signup.cpassword && validCPassword(signup.password, signup.cpassword);
   }, [signup.password, signup.cpassword]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!(validate.username && validate.password && validate.cpassword)) return;
 
-    const signupData = {
-      username: signup.username,
-      password: signup.password,
-    };
+    try {
+      api.cancel();
 
-    console.log(signupData);
+      const signupData = {
+        username: signup.username,
+        password: signup.password,
+      };
+
+      const response = await api.post("/signup", signupData);
+
+      if (response.ok) setSignupStatus(true);
+    } catch (error) {
+      setSignupStatus(false);
+    }
   };
 
   return (
-    <div className="formContainer">
-      <form onSubmit={handleSubmit}>
-        <h1>Sign Up</h1>
+    <div className="container">
+      <div className="formContainer">
+        {signupStatus && <div className="signupStatus">Account Created</div>}
+        <form onSubmit={handleSubmit}>
+          <h1>Sign Up</h1>
 
-        {inputs.map((input) => (
-          <FormInput key={input.id} {...input} />
-        ))}
+          {inputs.map((input) => (
+            <FormInput key={input.id} {...input} />
+          ))}
 
-        <button>Submit</button>
-      </form>
+          <button>Submit</button>
+        </form>
+      </div>
     </div>
   );
 };

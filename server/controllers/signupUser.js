@@ -3,20 +3,14 @@ const bcrypt = require("bcrypt");
 const User = require("../models/user");
 
 const signupUser = asyncHandler(async (req, res) => {
-  const { email, username, password } = req.body;
+  const { username, password } = req.body;
 
-  if (!email || !password || !username) {
+  if (!username || !password) {
     res.status(400);
     throw new Error("All fields are mandatory!");
   }
 
-  const checkEmail = await User.findOne({ email });
   const checkUsername = await User.findOne({ username });
-
-  if (checkEmail) {
-    res.status(400);
-    throw new Error("Email not available.");
-  }
 
   if (checkUsername) {
     res.status(400);
@@ -28,7 +22,6 @@ const signupUser = asyncHandler(async (req, res) => {
 
     await User.create({
       username,
-      email,
       password: hashedPassword,
     });
 
